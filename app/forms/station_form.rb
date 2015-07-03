@@ -18,10 +18,9 @@ class StationForm
 
     attribute :address_url, String
     attribute :address_priority, Integer
-    attribute :address_is_active, Boolean
 
     def unique_station_name
-      if Station.exists? name: station_name
+      if Station.exists?(name: station_name)
         errors.add :station_name, "station name needs to be unique"
       end
     end
@@ -33,7 +32,6 @@ class StationForm
     def save
         if valid?
             persist
-            true
         else
             false
         end
@@ -42,7 +40,27 @@ class StationForm
 private
 
     def persist
-        @station = Station.create(name: station_name, description: station_description)
-        @address = @station.addresses.create(url: address_url, priority: address_priority, is_active: address_is_active)
+      @station = Station.new(name: station_name, description: station_description)
+      @address = Address.new(url: address_url)
+
+       ActiveRecord::Base.transaction do
+        @station.addresses << @address
+        @station.save!
+       end
+  rescue
+    false
+
     end
+
+
 end
+
+
+
+
+
+
+
+
+
+
