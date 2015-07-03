@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @station.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @station.description %>
+</p>
+
+<% if @station.addresses.present? %>
+  <% @station.addresses.each do |address| %>
+    <strong>Addresses</strong>
+     <%= address.url%>
+  <% end %>
+<% end %><br/>
+
+<%= link_to 'Edit', edit_station_path(@station) %> |
+<%= link_to 'Back', stations_path %>
