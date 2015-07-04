@@ -56,6 +56,7 @@ class StationsController < ApplicationController
     end
 
     def station_params
-      params.require(:station_form).permit(:station_name, :station_description, :address_url)
+      params.require(:station_form).permit(:name,
+        :vote, :email,:phone)
     end
 end

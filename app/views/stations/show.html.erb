@@ -5,17 +5,16 @@
   <%= @station.name %>
 </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @station.description %>
-</p>
-
 <% if @station.addresses.present? %>
   <% @station.addresses.each do |address| %>
+  <p>
     <strong>Addresses</strong>
-     <%= address.url %>
+     phone: <%= address.phone %>
+     email: <%= address.email %>
+   </p>
   <% end %>
 <% end %><br/>
+
 
 <%= link_to 'Edit', edit_station_path(@station) %> |
 <%= link_to 'Back', stations_path %>
