@@ -2,8 +2,9 @@ class StationForm
 
     include ActiveModel::Model
 
-    validates :name, :presence => true
+    validates :name, presence: true
     validates :vote, presence: true
+    validates :contract, presence: true
     validate :unique_station_name
     validate :validate_contact_method
 
@@ -28,6 +29,10 @@ class StationForm
       else
        false
       end
+    end
+
+    def people_collection
+      Person.order(:name)
     end
 
 private
@@ -56,8 +61,9 @@ private
         @station.save!
         @pole.save!
       end
-    rescue StandardError => exception
+      rescue
       false
+
     end
 
 end
