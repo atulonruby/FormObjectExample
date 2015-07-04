@@ -26,11 +26,8 @@ class StationForm
 
 
     def save
-      if valid?
-       persist
-      else
-       false
-      end
+      return false unless valid?
+      persist
     end
 
     def people_collection
