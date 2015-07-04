@@ -7,7 +7,7 @@ class StationForm
     validate :unique_station_name
     validate :validate_contact_method
 
-    ATTRIBUTES = [:name, :email, :phone, :vote ]
+    ATTRIBUTES = [:name, :email, :phone, :vote, :contract ]
 
     attr_accessor :station, :address, :pole, *ATTRIBUTES
 
@@ -48,9 +48,11 @@ private
       @station = Station.new(name: name)
       @address = Address.new(phone: phone, email: email)
       @pole = Pole.new(vote: vote)
+      @person = Person.find(contract)
 
       ActiveRecord::Base.transaction do
         @station.addresses << @address
+        @station.people << @person
         @station.save!
         @pole.save!
       end

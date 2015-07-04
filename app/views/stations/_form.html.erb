@@ -23,9 +23,13 @@
     <%= f.label :phone %><br>
     <%= f.text_field :phone %>
   </div>
-     <div class="field">
+  <div class="field">
     <%= f.label :vote %><br>
     <%= f.text_field :vote %>
+  </div>
+  <div class="field">
+    <%= f.label :contract, "Assign contract:" %><br>
+    <%= f.collection_select :contract, Person.order(:name),:id,:name %>
   </div>
   <div class="actions">
     <%= f.submit %>
