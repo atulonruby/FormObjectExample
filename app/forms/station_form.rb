@@ -2,13 +2,11 @@ class StationForm
 
     include ActiveModel::Model
 
-    validates :name, presence: true
-    validates :vote, presence: true
-    validates :contract, presence: true
-    validate :unique_station_name
-    validate :validate_contact_method
+    def persisted?
+      false
+    end
 
-    ATTRIBUTES = [:name, :email, :phone, :vote, :contract ]
+    ATTRIBUTES = [:name, :email, :phone, :contract, :vote, :terms_of_service]
 
     attr_accessor :station, :address, :pole, *ATTRIBUTES
 
@@ -18,10 +16,14 @@ class StationForm
       end
     end
 
+    validates :name, presence: true
+    validates :vote, presence: true
+    validates :contract, presence: true
+    validates :terms_of_service, :acceptance => true
+    validate :unique_station_name
+    validate :validate_contact_method
 
-    def persisted?
-      false
-    end
+
 
     def save
       if valid?
@@ -39,7 +41,7 @@ private
 
     def unique_station_name
       if Station.exists?(name: name)
-        errors.add :name, "station name needs to be unique.Please choose another name."
+        errors.add(:name, "station name needs to be unique.Please choose another name." )
       end
     end
 
@@ -55,14 +57,17 @@ private
       @pole = Pole.new(vote: vote)
       @person = Person.find(contract)
 
-      ActiveRecord::Base.transaction do
-        @station.addresses << @address
-        @station.people << @person
-        @station.save!
-        @pole.save!
+      begin
+        ActiveRecord::Base.transaction do
+          @station.addresses << @address
+          @station.people << @person
+          @station.save!
+          @pole.save!
+        end
+      rescue ActiveRecord::RecordInvalid => e
+        errors.add(:base, e)
+        false
       end
-      rescue
-      false
 
     end
 
