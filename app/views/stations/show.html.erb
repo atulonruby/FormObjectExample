@@ -2,19 +2,25 @@
 
 <p>
   <strong>Name:</strong>
-  <%= @station.name %>
+  <%= @station.name.capitalize %>
 </p>
 
 <% if @station.addresses.present? %>
+<strong>Addresses</strong>
   <% @station.addresses.each do |address| %>
-  <p>
-    <strong>Addresses</strong>
-     phone: <%= address.phone %>
-     email: <%= address.email %>
-   </p>
+    <% if address.phone.present? %>
+       <p>Phone: <%= address.phone %></p>
+    <% end %>
+     <% if address.email.present? %>
+       <p>Email: <%= address.email %></p>
+    <% end %>
   <% end %>
 <% end %><br/>
 
+<% if @station.people.present? %>
+  <strong>Contract given to:</strong>
+  <p><%= @station.people.first.name.capitalize%></p>
+<% end %>
 
-<%= link_to 'Edit', edit_station_path(@station) %> |
+
 <%= link_to 'Back', stations_path %>

@@ -6,7 +6,7 @@ class StationForm
       false
     end
 
-    ATTRIBUTES = [:name, :email, :phone, :contract, :vote, :terms_of_service]
+    ATTRIBUTES = [:name, :email, :phone, :contract, :comment, :terms_of_service]
 
     attr_accessor :station, :address, :pole, *ATTRIBUTES
 
@@ -17,8 +17,9 @@ class StationForm
     end
 
     validates :name, presence: true
-    validates :vote, presence: true
+    validates :comment, presence: true
     validates :contract, presence: true
+    validates :phone,   :numericality => true, :allow_blank => true
     validates :terms_of_service, :acceptance => true
     validate :unique_station_name
     validate :validate_contact_method
@@ -49,17 +50,17 @@ private
     end
 
     def persist
-      @station = Station.new(name: name)
-      @address = Address.new(phone: phone, email: email)
-      @pole = Pole.new(vote: vote)
-      @person = Person.find(contract)
+      station = Station.new(name: name)
+      address = Address.new(phone: phone, email: email)
+      pole = Pole.new(comment: comment)
+      person = Person.find(contract)
 
       begin
         ActiveRecord::Base.transaction do
-          @station.addresses << @address
-          @station.people << @person
-          @station.save!
-          @pole.save!
+          station.addresses << address
+          station.people << person
+          station.save!
+          pole.save!
         end
       rescue ActiveRecord::RecordInvalid => e
         errors.add(:base, e)

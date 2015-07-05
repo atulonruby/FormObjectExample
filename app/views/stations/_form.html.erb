@@ -4,7 +4,7 @@
   <%= f.input :email %>
   <%= f.input :phone %>
   <%= f.input :contract, collection: @station.people_collection %>
-  <%= f.input :vote %>
+  <%= f.input :comment %>
   <%= f.input :terms_of_service, as: :boolean%>
   <%= f.button :submit, "Submit" %>
 <% end %>
