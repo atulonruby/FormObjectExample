@@ -8,13 +8,15 @@ class StationForm
 
     ATTRIBUTES = [:name, :email, :phone, :contract, :comment, :terms_of_service]
 
-    attr_accessor :station, :address, :pole, *ATTRIBUTES
+    attr_accessor *ATTRIBUTES
 
     def initialize(attributes = {})
+      puts "comment is attributes['comment']"
       ATTRIBUTES.each do |attribute|
        send("#{attribute}=", attributes[attribute])
       end
     end
+
 
     validates :name, presence: true
     validates :comment, presence: true
@@ -25,15 +27,15 @@ class StationForm
     validate :validate_contact_method
 
 
-
     def save
-      return false unless valid?
-      persist
+     return false unless valid?
+     persist
     end
 
     def people_collection
       Person.order(:name)
     end
+
 
 private
 
@@ -54,7 +56,7 @@ private
       address = Address.new(phone: phone, email: email)
       pole = Pole.new(comment: comment)
       person = Person.find(contract)
-
+      puts "pole value is #{pole.inspect}"
       begin
         ActiveRecord::Base.transaction do
           station.addresses << address

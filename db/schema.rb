@@ -11,15 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150704063828) do
+ActiveRecord::Schema.define(version: 20150706034015) do
 
   create_table "addresses", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "station_id"
     t.string   "priority"
     t.string   "email"
-    t.integer  "phone"
+    t.integer  "phone",      limit: 8
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contracts", force: :cascade do |t|
@@ -36,15 +42,30 @@ ActiveRecord::Schema.define(version: 20150704063828) do
   end
 
   create_table "poles", force: :cascade do |t|
-    t.string   "vote"
+    t.string   "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "stations", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "trackers", force: :cascade do |t|
+    t.datetime "established_on"
+    t.integer  "street_no"
+    t.integer  "station_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
 end
